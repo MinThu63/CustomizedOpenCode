@@ -11,7 +11,7 @@ MINTHU is an internal, privacy-first desktop AI coding and work assistant for co
 customized fork of the open-source OpenCode agent (MIT license). It runs without contacting OpenCode's hosted
 services, adds a company-style sign-in, lets employees teach the agent reusable "skills" that are saved and shared
 by person, department, or company, and can drive a real browser to do web tasks. It is also a portfolio project:
-the goal is a credible, demonstrable internal-tool prototype, not a production deployment.
+the goal is a credible, working internal-tool prototype, not a production deployment.
 
 ## 2. The point (why this exists)
 
@@ -35,7 +35,7 @@ MINTHU answers these with three ideas:
 
 ### In scope (prototype)
 - Desktop app (Electron) that runs on Windows.
-- Demo sign-in with department selection (no real authentication).
+- Company sign-in screen with department selection (credentials are not verified).
 - Skills library: create, browse, search, edit, delete, and call skills with `/`.
 - Skill visibility: only me, my department, whole company.
 - Offline/private mode: upstream network features off by default.
@@ -43,7 +43,7 @@ MINTHU answers these with three ideas:
 - Proposal-deck skill that produces a 9-slide `.pptx` from a rough idea.
 
 ### Out of scope (for now)
-- Real authentication, SSO, passwords, or access enforcement. The login is a demo.
+- Real authentication, SSO, passwords, or access enforcement. The sign-in does not verify credentials.
 - A central server or database for sharing across machines. Sharing uses a shared folder at most.
 - Billing, analytics, admin dashboards, multi-tenant hosting.
 - Mobile apps, macOS/Linux packaging polish.
@@ -55,7 +55,7 @@ MINTHU answers these with three ideas:
 | --- | --- | --- |
 | Rebrand to "MINTHU" | Built | Own app name, icons, app ID `ai.minthu.desktop`, data dir `minthu`; isolated from any installed OpenCode. |
 | Privacy mode | Built | Auto-update, session sharing, models catalog, changelog fetch, UI proxy from `app.opencode.ai`, and language-server downloads are off by default. |
-| Demo login | Built | `packages/app/src/components/demo-login.tsx`, logic and tests in `packages/app/src/utils/demo-session.ts`. Username, password (never stored), department. Chip with Sign out at bottom right. Env `VITE_DEMO_LOGIN=false` disables it. |
+| Sign-in screen | Built | `packages/app/src/components/login-gate.tsx`, logic and tests in `packages/app/src/utils/login-session.ts`. Username, password (never stored), department. Chip with Sign out at bottom right. Env `VITE_LOGIN_SCREEN=false` disables it. |
 | `disableStream` provider option | Built | `packages/opencode/src/provider/disable-stream.ts` plus tests. For OpenAI-compatible endpoints that cannot stream. |
 | Proposal-deck skill | Built | `.opencode/skills/project-proposal-slides`. Third-party MIT skill; keep its credits. |
 | Browser control | Built, **insecure** | `browser-control/`: Chrome extension, Bun relay on port 8790, about 25 tools. The relay has no auth and listens on all interfaces. Must be fixed before real use. |
@@ -92,7 +92,7 @@ Skills are saved **per person**, with department and company as sharing levels.
 - Every skill records its author (front matter field `author`) and department.
 - Authors can edit and delete only their own skills. Others are read-only.
 - Promoting a skill (changing "Visible to") copies the folder to the shared location.
-- Visibility is a label, not a lock. The demo login cannot enforce access.
+- Visibility is a label, not a lock. The sign-in screen cannot enforce access.
 
 ### 7.3 Screens
 1. **Skills library** (new "Skills" item in the sidebar next to Sessions and Settings)
@@ -139,7 +139,7 @@ Human Resources. Use made-up names. Do not use real people or company data.
 
 ## 9. Risks and honest limits
 
-- The login is a demo. It must be presented as a demo, never as security.
+- The sign-in does not verify credentials. Present it as a sign-in screen, never as security.
 - Sharing between computers needs a shared folder or a server that does not exist yet.
 - Browser control can drive a logged-in browser. It must get authentication, a localhost-only bind, an origin check,
   a domain allowlist, and approval prompts before anyone but the author uses it.
@@ -156,16 +156,16 @@ Human Resources. Use made-up names. Do not use real people or company data.
 4. Department-aware defaults: per-department model or tool permissions tied to the login.
 5. Local model setup (Ollama, LM Studio) to fit the privacy theme.
 6. Provider and cost dashboard.
-7. README demo GIF and screenshots; small evaluation suite for browser tasks.
+7. README animated preview (GIF) and screenshots; small evaluation suite for browser tasks.
 
 ## 11. How to build it: instructions for an AI assistant
 
 When prototyping from this brief:
 - Start from the existing code. Do not rewrite the app. Add new files next to the closest existing ones, and keep edits
-  to existing files small (the demo login only touches `packages/app/src/app.tsx` by 3 lines).
+  to existing files small (the sign-in gate only touches `packages/app/src/app.tsx` by 3 lines).
 - Reuse `@opencode-ai/ui` components and theme CSS variables so new screens match the app in light and dark themes.
 - Check file line endings before editing; several files use CRLF.
-- Put pure logic in a small module with tests (see `demo-session.ts` and `demo-session.test.ts` for the pattern).
+- Put pure logic in a small module with tests (see `login-session.ts` and `login-session.test.ts` for the pattern).
 - Verify visually: run `bun run dev` in `packages/app` (serves on port 3000), open it in a browser, and screenshot.
 - Do not commit secrets. Do not add network calls to public services.
 - Run tests and typecheck from the package directory, not the repo root.
@@ -174,7 +174,7 @@ When prototyping from this brief:
 
 | Path | Purpose |
 | --- | --- |
-| `packages/app` | SolidJS web UI; demo login lives here |
+| `packages/app` | SolidJS web UI; the sign-in gate lives here |
 | `packages/desktop` | Electron shell, build config, icons |
 | `packages/opencode` | agent runtime, providers, skills loading |
 | `packages/core` | shared services, global paths, models catalog gate |

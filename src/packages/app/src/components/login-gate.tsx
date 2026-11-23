@@ -8,14 +8,14 @@ import {
   readSession,
   validateLogin,
   writeSession,
-} from "@/utils/demo-session"
+} from "@/utils/login-session"
 
-// Private-build demo: on unless VITE_DEMO_LOGIN=false.
-const enabled = import.meta.env.VITE_DEMO_LOGIN !== "false"
+// Private build: on unless VITE_LOGIN_SCREEN=false.
+const enabled = import.meta.env.VITE_LOGIN_SCREEN !== "false"
 
 const [session, setSession] = createSignal(readSession())
 
-export function DemoLoginGate(props: ParentProps) {
+export function LoginGate(props: ParentProps) {
   return (
     <Show when={!enabled || session()} fallback={<LoginScreen />}>
       {props.children}
@@ -73,7 +73,7 @@ function LoginScreen() {
           </Button>
         </form>
         <div class="text-12-regular text-text-weak">
-          Demo mode: credentials are not verified, and nothing is sent or stored except your username and department.
+          Credentials are not verified, and nothing is sent or stored except your username and department.
         </div>
       </div>
     </div>

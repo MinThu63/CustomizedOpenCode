@@ -4,7 +4,7 @@
 
 # MINTHU
 
-**A private, company-style desktop AI assistant, built by customizing the open-source OpenCode agent.**
+**OpenCode, rebuilt for company use: private by default, signed-in by department, extended with browser control.**
 
 ![Electron](https://img.shields.io/badge/Electron-42-47848F?logo=electron&logoColor=white)
 ![SolidJS](https://img.shields.io/badge/SolidJS-1.9-2C4F7C?logo=solid&logoColor=white)
@@ -21,8 +21,35 @@
 
 ---
 
+## MINTHU vs OpenCode
+
+**Same agent core. Different defaults, identity, and reach.**
+
+| | OpenCode (base) | MINTHU |
+| --- | --- | --- |
+| **Network by default** | Update checks, session sharing, model catalog fetch, changelog fetch, web UI proxy, language-server downloads are on | **All off.** Opt back in per feature with flags |
+| **Who is using it** | Anonymous single user | **Company sign-in** with department, user chip, sign out |
+| **Models** | Built-in catalog of providers | **You choose.** Only providers you configure appear |
+| **Endpoints that can't stream** | No option to turn streaming off | **`disableStream` option** replays a normal reply as a stream |
+| **Browser** | Not in the repo | **Real-Chrome control**: extension, relay, 20+ tools *(experimental)* |
+| **Office output** | Not in the repo | **Proposal-deck skill**: rough idea to 9-slide `.pptx` |
+| **Install identity** | Shares app ID and data folder with every OpenCode install | **Own name, icons, app ID, data folder.** Runs side by side |
+
+**What that buys a company**
+- Work goes only to the model endpoints it configures.
+- Every session starts with a known user and department.
+- One patch file shows exactly what changed, so security review is quick.
+
+**Where it is *not* better**
+- Same agent engine, tools, and model support as OpenCode. It does not add capability there.
+- No built-in model list, so setup is manual.
+- The sign-in screen does not verify credentials, and browser control has no authentication yet.
+
+---
+
 ## Table of contents
 
+- [MINTHU vs OpenCode](#minthu-vs-opencode)
 - [Motivation](#motivation)
 - [Features](#features)
 - [Architecture](#architecture)
@@ -50,7 +77,7 @@
 | Feature | What it does |
 | --- | --- |
 | **Private by default** | Auto-update, session sharing, models catalog, changelog fetch, hosted web UI proxy and language-server downloads are off. |
-| **Company sign-in (demo)** | Username, password and department. Nothing is verified; the password is never stored. |
+| **Company sign-in** | Username, password and department. Credentials are not verified; the password is never stored. |
 | **User chip + sign out** | Shows name and department; sign out returns to the sign-in screen. |
 | **Browser control** *(experimental)* | Chrome extension + local relay + 20+ tools so the agent can navigate, read, click, fill and screenshot. |
 | **`disableStream` option** | Makes OpenAI-compatible endpoints that can't stream work with this agent. |
@@ -64,7 +91,7 @@
 
 ```mermaid
 flowchart LR
-    U([Employee]) --> L[Demo sign-in gate]
+    U([Employee]) --> L[Sign-in gate]
     L --> UI[SolidJS UI]
     subgraph Desktop[Electron shell]
         UI
@@ -94,7 +121,7 @@ flowchart LR
 │   └── tools/              #   one file per agent tool
 ├── src/                    # New source files, at their OpenCode paths
 │   └── packages/
-│       ├── app/            #   demo sign-in screen + session logic + tests
+│       ├── app/            #   sign-in gate + session logic + tests
 │       └── opencode/       #   disableStream provider wrapper + tests
 ├── patches/                # My edits to upstream files, as one patch
 ├── skills/                 # Proposal-deck skill (third-party, MIT)
@@ -135,20 +162,21 @@ Run the tests from inside the package directory:
 
 ```bash
 cd packages/opencode && bun test test/provider/disable-stream.test.ts
-cd packages/app && bun test --conditions=solid --preload ./happydom.ts src/utils/demo-session.test.ts
+cd packages/app && bun test --conditions=solid --preload ./happydom.ts src/utils/login-session.test.ts
 ```
 
 Browser control (experimental): run `bun run start` in `browser-control/server`, then load
 `browser-control/extension` as an unpacked extension in Chrome.
 
-Turn the sign-in screen off with `VITE_DEMO_LOGIN=false`.
+Turn the sign-in screen off with `VITE_LOGIN_SCREEN=false`.
 
 ---
 
 ## Screenshots
 
-Captured from the web build with fake data (demo user "Aye Chan", Engineering). The debug
-bar from the dev build was painted over.
+Captured from the web build with fake data (user "Aye Chan", Engineering). The signed-in
+view uses a seeded session and shows the empty state. A debug bar from the app's dev tools
+was painted over.
 
 | | |
 | :---: | :---: |
@@ -168,9 +196,9 @@ bar from the dev build was painted over.
 - [ ] **Approval layer**: domain allowlist, confirm before submit or delete, action log
 - [ ] Department-aware defaults tied to sign-in
 - [ ] Local model setup (Ollama, LM Studio)
-- [ ] Demo GIF
+- [ ] Animated preview (GIF)
 
-Known limits: the sign-in is a demo, not security; browser control has no authentication yet.
+Known limits: the sign-in does not verify credentials; browser control has no authentication yet.
 Full spec in [`docs/PROJECT-BRIEF.md`](docs/PROJECT-BRIEF.md).
 
 ---

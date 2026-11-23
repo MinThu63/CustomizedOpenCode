@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test"
-import { createSession, displayName, parseSession, validateLogin } from "./demo-session"
+import { createSession, displayName, parseSession, validateLogin } from "./login-session"
 
 describe("validateLogin", () => {
   test("accepts any username and password with a known department", () => {

@@ -1,12 +1,12 @@
 diff --git a/packages/app/src/app.tsx b/packages/app/src/app.tsx
-index 0c950871a3..1354212048 100644
+index 0c950871a3..5e5d5f12e6 100644
 --- a/packages/app/src/app.tsx
 +++ b/packages/app/src/app.tsx
 @@ -39,6 +39,7 @@ import {
  import { Dynamic } from "solid-js/web"
  import { makeEventListener } from "@solid-primitives/event-listener"
  import { CommandProvider, useCommand, type CommandOption } from "@/context/command"
-+import { DemoLoginGate } from "@/components/demo-login"
++import { LoginGate } from "@/components/login-gate"
  import { CommentsProvider } from "@/context/comments"
  import { FileProvider } from "@/context/file"
  import { ServerSDKProvider } from "@/context/server-sdk"
@@ -14,7 +14,7 @@ index 0c950871a3..1354212048 100644
      >
        <GlobalProvider>
          <SettingsProvider>
-+          <DemoLoginGate>
++          <LoginGate>
            <ConnectionGate disableHealthCheck={props.disableHealthCheck} startup={props.startup}>
              <Show when={useSettings().general.newLayoutDesigns().toString()} keyed>
                <Dynamic
@@ -22,7 +22,7 @@ index 0c950871a3..1354212048 100644
                </Dynamic>
              </Show>
            </ConnectionGate>
-+          </DemoLoginGate>
++          </LoginGate>
          </SettingsProvider>
        </GlobalProvider>
      </ServerProvider>
