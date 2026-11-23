@@ -40,7 +40,6 @@ MINTHU answers these with three ideas:
 - Skill visibility: only me, my department, whole company.
 - Offline/private mode: upstream network features off by default.
 - Optional browser control (experimental).
-- Proposal-deck skill that produces a 9-slide `.pptx` from a rough idea.
 
 ### Out of scope (for now)
 - Real authentication, SSO, passwords, or access enforcement. The sign-in does not verify credentials.
@@ -57,7 +56,6 @@ MINTHU answers these with three ideas:
 | Privacy mode | Built | Auto-update, session sharing, models catalog, changelog fetch, UI proxy from `app.opencode.ai`, and language-server downloads are off by default. |
 | Sign-in screen | Built | `packages/app/src/components/login-gate.tsx`, logic and tests in `packages/app/src/utils/login-session.ts`. Username, password (never stored), department. Chip with Sign out at bottom right. Env `VITE_LOGIN_SCREEN=false` disables it. |
 | `disableStream` provider option | Built | `packages/opencode/src/provider/disable-stream.ts` plus tests. For OpenAI-compatible endpoints that cannot stream. |
-| Proposal-deck skill | Built | `.opencode/skills/project-proposal-slides`. Third-party MIT skill; keep its credits. |
 | Browser control | Built, **insecure** | `browser-control/`: Chrome extension, Bun relay on port 8790, about 25 tools. The relay has no auth and listens on all interfaces. Must be fixed before real use. |
 | Skills library UI | Built elsewhere | Shown in screenshots; source not in this repo yet. Spec in section 7. |
 | Slash-call for skills | Mostly exists | The app's `/` menu already supports a `skill` source. |
@@ -180,5 +178,4 @@ When prototyping from this brief:
 | `packages/core` | shared services, global paths, models catalog gate |
 | `packages/ui` | shared components and theme |
 | `browser-control/` | Chrome extension, relay server, agent tools |
-| `.opencode/skills/` | project skills (proposal-deck skill) |
 | `scripts/gen-icons.py` | builds the app icon set from one image |

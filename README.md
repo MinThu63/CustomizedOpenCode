@@ -36,7 +36,6 @@
 | **Models** | Built-in catalog of providers | **You choose.** Only providers you configure appear |
 | **Endpoints that can't stream** | No option to turn streaming off | **`disableStream` option** replays a normal reply as a stream |
 | **Browser** | Not in the repo | **Real-Chrome control** (experimental), with an Allow / Deny prompt before a page is controlled† |
-| **Office output** | Not in the repo | **Proposal-deck skill**: rough idea to 9-slide `.pptx` |
 | **Install identity** | Shares app ID and data folder with every OpenCode install | **Own name, icons, app ID, data folder.** Runs side by side |
 
 **What that buys a company**
@@ -88,7 +87,6 @@
 | **Skills library** † | Browse, search and filter skills (All, Mine, My department, All company, Favourites). Add a skill, mark favourites, edit or delete your own, read others', and press **Use** to call one. |
 | **Browser control** *(experimental)* | Chrome extension + local relay + 20+ tools so the agent can navigate, read, click, fill and screenshot. Shows an Allow / Deny prompt before controlling a page.† |
 | **`disableStream` option** | Makes OpenAI-compatible endpoints that can't stream work with this agent. |
-| **Proposal-deck skill** | Turns a rough idea into a 9-slide `.pptx` with speaker notes. |
 | **Isolated identity** | Own name, icons, app ID and data folder, separate from any installed OpenCode. |
 | **Windows local build** | Unsigned unpacked build for dev machines; signed installer only in CI. |
 
@@ -133,7 +131,6 @@ flowchart LR
 │       ├── app/            #   sign-in gate + session logic + tests
 │       └── opencode/       #   disableStream provider wrapper + tests
 ├── patches/                # My edits to upstream files, as one patch
-├── skills/                 # Proposal-deck skill (third-party, MIT)
 ├── scripts/gen-icons.py    # Builds the icon set from one image
 └── docs/                   # Screenshots, logo, full project brief
 ```
@@ -162,7 +159,6 @@ git checkout 03e67171ab                       # the commit this was built on
 git apply /path/to/this-repo/patches/minthu-customizations.patch
 cp -r /path/to/this-repo/src/packages/. packages/
 cp -r /path/to/this-repo/browser-control .
-cp -r /path/to/this-repo/skills/project-proposal-slides .opencode/skills/
 bun install
 bun dev:desktop
 ```
@@ -217,5 +213,4 @@ no authentication yet. Full spec in [`docs/PROJECT-BRIEF.md`](docs/PROJECT-BRIEF
 ## License
 
 MIT. Based on [OpenCode](https://github.com/anomalyco/opencode), copyright its contributors;
-see [`LICENSE`](LICENSE). The proposal-deck skill keeps its original authors' credit in
-`skills/project-proposal-slides/SKILL.md`.
+see [`LICENSE`](LICENSE).
