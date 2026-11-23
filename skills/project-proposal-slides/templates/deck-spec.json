@@ -1,0 +1,86 @@
+{
+  "slide_size": "16:9",
+  "slides": [
+    {
+      "title": "DocCopilot",
+      "subtitle": "Internal search over docs and code that answers in seconds.",
+      "bullets": ["Python · FastAPI · pgvector · LlamaIndex · Claude · React", "Platform Team"],
+      "speaker_notes": "This is DocCopilot. In one line: internal search over docs and code that answers in seconds. Today I'll walk through the problem, the plan, and the ask. Built on Python, FastAPI, pgvector, LlamaIndex and Claude, owned by the Platform Team."
+    },
+    {
+      "title": "Executive Summary & Agenda",
+      "bullets": [
+        "Problem: engineers lose ~3h/week finding and trusting internal answers",
+        "Solution: RAG assistant over docs + code, grounded with citations",
+        "ROI: -30% onboarding time; -40% support tickets in Q1 (assumed)",
+        "Timeline: MVP in 6 weeks; rollout by week 10",
+        "Agenda: Scope - Features - Stack - Plan - Risks - Ask"
+      ],
+      "speaker_notes": "The problem: engineers burn about three hours a week hunting for answers and still can't trust them. The fix is a retrieval-augmented assistant over docs and code that always cites its source. The payback we're projecting is down thirty percent on onboarding and down forty percent on support tickets next quarter, though I've flagged those as assumptions to firm up. We land MVP in six weeks and roll out by week ten. Let me walk the agenda."
+    },
+    {
+      "title": "Overview & Scope",
+      "bullets": [
+        "Goal: one grounded answer endpoint for internal docs + code",
+        "In-scope: docs wiki, code search, Slack bot, citations, re-indexing",
+        "Out-of-scope: external access, PII, voice, non-English, fine-tuning"
+      ],
+      "speaker_notes": "Why now: our docs are the source of truth but nobody can find them, so people ask each other. We're building exactly one thing — a grounded answer endpoint for internal docs and code. In scope is the docs wiki, code search, a Slack bot, source citations, and re-indexing. I've deliberately left out external access, PII, voice, non-English, and fine-tuning so we can ship the core fast."
+    },
+    {
+      "title": "Core Features",
+      "bullets": [
+        "Grounded Q&A over docs + code with source citations",
+        "Slack bot answers inline with links back to source",
+        "Re-index pipeline (webhook + nightly) keeps answers current",
+        "Admin dashboard: query log, hit/miss, stale-doc flags"
+      ],
+      "speaker_notes": "Four features, each tied to the three-hour problem. Grounded Q&A with citations cuts search time because you get the answer and the proof. The Slack bot answers inline so it lives where the question already happened. A webhook-plus-nightly re-index pipeline kills the staleness that makes people distrust search. And the admin dashboard — query log, hit and miss, stale-doc flags — is what keeps it maintainable after we hand it off."
+    },
+    {
+      "title": "UI Mockup & Workflow",
+      "bullets": [
+        "Ask in Slack -> router (docs vs code) -> hybrid retriever -> grounded LLM answer -> top-3 source links",
+        "Wireframe (notes): Slack thread + 2 source links; web admin: 7d queries, hit rate, stale count, Re-index"
+      ],
+      "speaker_notes": "Here's the flow end to end. You ask in Slack, a tiny router decides docs or code, a hybrid BM25-plus-vector retriever pulls the chunks, the LLM answers grounded in only those chunks, and you get top-three source links. The key discipline is that the model can only answer from what it retrieved, which is what prevents hallucination."
+    },
+    {
+      "title": "Technology Stack",
+      "bullets": [
+        "Frontend: React + internal design system; Slack Web API",
+        "Backend: Python 3.12, FastAPI, Celery for re-index",
+        "Data & AI: PostgreSQL + pgvector, LlamaIndex, Claude API, hybrid BM25+vector",
+        "Infra: Docker, Kubernetes, GitHub Actions CI/CD, S3 doc snapshots"
+      ],
+      "speaker_notes": "The stack is deliberately boring so it's easy to run. Frontend is React on our internal design system, plus the Slack Web API. Backend is Python 3.12 on FastAPI with Celery handling re-index jobs. For data and AI we use PostgreSQL with the pgvector extension, LlamaIndex for the retrieval pipeline, the Claude API for the model, and a hybrid BM25 plus vector search. Infra is Docker, Kubernetes, GitHub Actions, and S3 for doc snapshots."
+    },
+    {
+      "title": "Execution Plan & Timeline",
+      "bullets": [
+        "Phase 1 Discovery & Setup (wk 1-2): corpus audit, schema, CI; 80% docs indexed",
+        "Phase 2 MVP Build (wk 3-6): Q&A endpoint, Slack bot, citations; <2s p50",
+        "Phase 3 Testing & Rollout (wk 7-10): eval harness, dashboard, 2-team pilot; >=80% hit"
+      ],
+      "speaker_notes": "Ten weeks, three phases. Phase one, weeks one to two: audit the corpus, define the schema, stand up CI, and get eighty percent of docs indexed in staging. Phase two, weeks three to six: build the Q&A endpoint, the Slack bot, and citations, targeting sub-two-second p50 latency. Phase three, weeks seven to ten: the eval harness with fifty golden questions, the admin dashboard, and a two-team pilot with at least eighty percent hit rate."
+    },
+    {
+      "title": "Risk & Success Criteria",
+      "bullets": [
+        "Risk: stale docs -> wrong answers; mitigate timestamps + re-index + no-answer fallback",
+        "Risk: hallucination erodes trust; mitigate strict grounding + always-cite + miss log",
+        "Risk: cost at scale; mitigate cache, small classifier model, budget alert",
+        "Done: >=80% hit-rate on eval set; p50 <2s; >=2 pilot teams active; >=30% fewer tickets by wk 12"
+      ],
+      "speaker_notes": "Three risks I want to name upfront. Stale docs will produce wrong answers, so we add freshness timestamps, the re-index pipeline, and a no-answer fallback when confidence is low. Hallucination will erode trust, so the model only answers from retrieved chunks, always cites, and we log every miss. And cost at scale — we mitigate with a response cache, a small classifier model, and a monthly budget alert. Done means eighty percent hit rate on the eval set, sub-two-second p50, two pilot teams active, and thirty percent fewer related tickets by week twelve."
+    },
+    {
+      "title": "Closing & Next Steps",
+      "bullets": [
+        "Ask now: approve 6-week MVP (2 engineers) + Claude API budget (assumed $1k/mo)",
+        "Next review: week-2 checkpoint; pilot sign-off at week 10"
+      ],
+      "speaker_notes": "What I need from you today is a yes on two things: approval of a six-week MVP with two engineers, and the Claude API budget, which I'm assuming at a thousand dollars a month until we measure real usage. After that, I'll check in at the week-two checkpoint and bring pilot sign-off at week ten. That's the ask — thank you."
+    }
+  ]
+}

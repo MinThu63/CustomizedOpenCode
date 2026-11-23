@@ -1,0 +1,15 @@
+{
+  "manifest_version": 3,
+  "name": "OpenCode Browser Control",
+  "version": "0.1.0",
+  "description": "Lets the opencode agent navigate, click, and type in the browser while you watch.",
+  "permissions": ["tabs", "scripting", "activeTab", "alarms", "windows", "downloads", "webNavigation"],
+  "host_permissions": ["<all_urls>"],
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "action": {
+    "default_title": "OpenCode Browser Control"
+  }
+}
