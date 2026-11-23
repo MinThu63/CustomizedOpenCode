@@ -59,7 +59,7 @@ MINTHU answers these with three ideas:
 | `disableStream` provider option | Built | `packages/opencode/src/provider/disable-stream.ts` plus tests. For OpenAI-compatible endpoints that cannot stream. |
 | Proposal-deck skill | Built | `.opencode/skills/project-proposal-slides`. Third-party MIT skill; keep its credits. |
 | Browser control | Built, **insecure** | `browser-control/`: Chrome extension, Bun relay on port 8790, about 25 tools. The relay has no auth and listens on all interfaces. Must be fixed before real use. |
-| Skills library UI | Designed | See section 7. Not coded. |
+| Skills library UI | Built elsewhere | Shown in screenshots; source not in this repo yet. Spec in section 7. |
 | Slash-call for skills | Mostly exists | The app's `/` menu already supports a `skill` source. |
 | Windows local build | Built | Unsigned unpacked `dir` build; output folder `packages/desktop/build-app/`. |
 
